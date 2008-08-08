@@ -1,5 +1,9 @@
 # $Id$
 
+"""
+Base class for requests handled by this blog software.
+"""
+
 import os
 
 from google.appengine.ext import webapp

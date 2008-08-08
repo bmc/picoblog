@@ -1,5 +1,11 @@
 # $Id$
 
+"""
+Google App Engine Script that handles display of the published
+items in the blog.
+"""
+
+__docformat__ = 'restructuredtext'
 
 # -----------------------------------------------------------------------------
 # Imports
@@ -27,7 +33,9 @@ import request
 # -----------------------------------------------------------------------------
 
 class DateCount(object):
-
+    """
+    Convenience class for storing and sorting year/month counts.
+    """
     def __init__(self, date, count):
         self.date = date
         self.count = count
@@ -45,17 +53,26 @@ class DateCount(object):
         return '<%s: %s>' % (self.__class__.__name__, str(self))
 
 class TagCount(object):
-
+    """
+    Convenience class for storing and sorting tags and counts.
+    """
     def __init__(self, tag, count):
         self.css_class = ""
         self.count = count
         self.tag = tag
 
 class AbstractPageHandler(request.BlogRequestHandler):
+    """
+    Abstract base class for all handlers in this module. Basically,
+    this class exists to consolidate common logic.
+    """
 
     def get_tag_counts(self):
         """
         Get tag counts and calculate tag cloud frequencies.
+        
+        :rtype: list
+        :return: list of ``TagCount`` objects, in random order
         """
         tag_counts = Article.get_all_tags()
         result = []
@@ -88,6 +105,12 @@ class AbstractPageHandler(request.BlogRequestHandler):
         return result
 
     def get_month_counts(self):
+        """
+        Get date counts, sorted in reverse chronological order.
+        
+        :rtype: list
+        :return: list of ``DateCount`` objects
+        """
         hash = Article.get_all_datetimes()
         datetimes = hash.keys()
         date_count = {}
@@ -104,6 +127,25 @@ class AbstractPageHandler(request.BlogRequestHandler):
         return [DateCount(date, date_count[date]) for date in dates]
 
     def augment_articles(self, articles, url_prefix, html=True):
+        """
+        Augment the ``Article`` objects in a list with the expanded
+        HTML, the path to the article, and the full URL of the article.
+        The augmented fields are:
+        
+        - ``html``: the optionally expanded HTML
+        - ``path``: the article's path
+        - ``url``: the full URL to the article
+        
+        :Parameters:
+            articles : list
+                list of ``Article`` objects to be augmented
+
+            url_prefix : str
+                URL prefix to use when constructing full URL from path
+                
+            html : bool
+                ``True`` to generate HTML from each article's RST
+        """
         for article in articles:
             if html:
                 try:
@@ -118,6 +160,25 @@ class AbstractPageHandler(request.BlogRequestHandler):
                         request,
                         recent,
                         template_name='show-articles.html'):
+        """
+        Render a list of articles.
+        
+        :Parameters:
+            articles : list
+                list of ``Article`` objects to render
+
+            request : HttpRequest
+                the GAE HTTP request object
+                
+            recent : list
+                list of recent ``Article`` objects. May be empty.
+                
+            template_name : str
+                name of template to use
+                
+        :rtype: str
+        :return: the rendered articles
+        """
         url_prefix = 'http://' + request.environ['SERVER_NAME']
         port = request.environ['SERVER_PORT']
         if port:
@@ -157,7 +218,13 @@ class AbstractPageHandler(request.BlogRequestHandler):
 
         return self.render_template(template_name, template_variables)
 
-    def get_recent(self, articles=None):
+    def get_recent(self):
+        """
+        Get up to ``defs.TOTAL_RECENT`` recent articles.
+
+        :rtype: list
+        :return: list of recent ``Article`` objects
+        """
         if not articles:
             articles = Article.published()
 
@@ -170,6 +237,9 @@ class AbstractPageHandler(request.BlogRequestHandler):
         return recent
 
 class FrontPageHandler(AbstractPageHandler):
+    """
+    Handles requests to display the front (or main) page of the blog.
+    """
     def get(self):
         articles = Article.published()
         if len(articles) > defs.MAX_ARTICLES_PER_PAGE:
@@ -180,6 +250,10 @@ class FrontPageHandler(AbstractPageHandler):
                                                      self.get_recent()))
 
 class ArticlesByTagHandler(AbstractPageHandler):
+    """
+    Handles requests to display a set of articles that have a
+    particular tag.
+    """
     def get(self, tag):
         articles = Article.all_for_tag(tag.lower())
         self.response.out.write(self.render_articles(articles,
@@ -187,6 +261,10 @@ class ArticlesByTagHandler(AbstractPageHandler):
                                                      self.get_recent()))
 
 class ArticlesForMonthHandler(AbstractPageHandler):
+    """
+    Handles requests to display a set of articles that were published
+    in a given month.
+    """
     def get(self, year, month):
         articles = Article.all_for_month(int(year), int(month))
         self.response.out.write(self.render_articles(articles,
@@ -194,6 +272,10 @@ class ArticlesForMonthHandler(AbstractPageHandler):
                                                      self.get_recent()))
 
 class SingleArticleHandler(AbstractPageHandler):
+    """
+    Handles requests to display a single article, given its unique ID.
+    Handles nonexistent IDs.
+    """
     def get(self, id):
         article = Article.get(int(id))
         if article:
@@ -210,6 +292,9 @@ class SingleArticleHandler(AbstractPageHandler):
                                                      template_name=template))
 
 class ArchivePageHandler(AbstractPageHandler):
+    """
+    Handles requests to display the list of all articles in the blog.
+    """
     def get(self):
         articles = Article.published()
         self.response.out.write(self.render_articles(articles,
@@ -218,6 +303,9 @@ class ArchivePageHandler(AbstractPageHandler):
                                                      'archive.html'))
 
 class RSSFeedHandler(AbstractPageHandler):
+    """
+    Handles request for an RSS2 feed of the blog's contents.
+    """
     def get(self):
         articles = Article.published()
         self.response.headers['Content-Type'] = 'text/xml'
@@ -227,6 +315,9 @@ class RSSFeedHandler(AbstractPageHandler):
                                                      'rss2.xml'))
 
 class NotFoundPageHandler(AbstractPageHandler):
+    """
+    Handles pages that aren't found.
+    """
     def get(self):
         self.response.out.write(self.render_articles([],
                                                      self.request,

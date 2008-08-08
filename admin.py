@@ -1,5 +1,10 @@
 # $Id$
 
+"""
+Google App Engine Script that handles administration screens for the
+blog.
+"""
+
 import cgi
 
 from google.appengine.api import users
@@ -14,12 +19,19 @@ import request
 # -----------------------------------------------------------------------------
 
 class ShowArticlesHandler(request.BlogRequestHandler):
+    """
+    Handles the main admin page, which lists all articles in the blog,
+    with links to their corresponding edit pages.
+    """
     def get(self):
         articles = Article.get_all()
         template_vars = {'articles' : articles}
         self.render_template('admin-main.html', template_vars)
     
 class NewArticleHandler(request.BlogRequestHandler):
+    """
+    Handles requests to create and edit a new article.
+    """
     def get(self):
         article = Article(title='New article', 
                           body='Content goes here',
@@ -28,6 +40,9 @@ class NewArticleHandler(request.BlogRequestHandler):
         self.render_template('admin-edit.html', template_vars)
 
 class SaveArticleHandler(request.BlogRequestHandler):
+    """
+    Handles form submissions to save an edited article.
+    """
     def post(self):
         title = cgi.escape(self.request.get('title'))
         body = cgi.escape(self.request.get('content'))
@@ -70,6 +85,9 @@ class SaveArticleHandler(request.BlogRequestHandler):
             self.redirect('/admin/')
 
 class EditArticleHandler(request.BlogRequestHandler):
+    """
+    Handles requests to edit an article.
+    """
     def get(self):
         id = int(self.request.get('id'))
         article = Article.get(id)
@@ -81,6 +99,9 @@ class EditArticleHandler(request.BlogRequestHandler):
         self.render_template('admin-edit.html', template_vars)
         
 class DeleteArticleHandler(request.BlogRequestHandler):
+    """
+    Handles form submissions to delete an article.
+    """
     def get(self):
         id = int(self.request.get('id'))
         article = Article.get(id)
