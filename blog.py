@@ -255,7 +255,7 @@ class ArticlesByTagHandler(AbstractPageHandler):
     particular tag.
     """
     def get(self, tag):
-        articles = Article.all_for_tag(tag.lower())
+        articles = Article.all_for_tag(tag)
         self.response.out.write(self.render_articles(articles,
                                                      self.request,
                                                      self.get_recent()))
