@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block main %}
+  {% for article in articles %}
+    {% include "article.html" %}
+  {% endfor %}
+{% endblock %}
+
+{% block recent_list %}
+  {% if recent %}
+    <b>Recent:</b>
+    <ul>
+    {% for article in recent %}
+      <li><a href="{{ article.path }}">{{ article.title }}</a>
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endblock %}
+
+{% block date_list %}
+  {% if date_list %}
+    <b>By month:</b>
+    <ul>
+    {% for date_count in date_list %}
+      <li><a href="{{ date_path }}/{{ date_count.date|date:"Y-m" }}/">{{ date_count.date|date:"F, Y" }}</a> ({{ date_count.count }})
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endblock %}
+
+{% block tag_list %}
+  {% if tag_list %}
+    <div id="tag-cloud">
+    {% for tag_count in tag_list %}
+      <a class="{{ tag_count.css_class }}" 
+         href="{{ tag_path }}/{{ tag_count.tag }}/">{{ tag_count.tag }}({{ tag_count.count }})</a>{% if not forloop.last %},{% endif %}
+    {% endfor %}
+    </div>
+  {% endif %}
+{% endblock %}
+

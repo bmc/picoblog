@@ -1,0 +1,20 @@
+
+  <table class="article" width="100%" border="0" cellspacing="0" cellpadding="0">
+    <tr class="article_title_line">
+      <td class="article_title">{{ article.title }}</td>
+      <td class="timestamp">{{ article.published_when|date:"j F, Y \a\t g:i A" }}</td>
+    </tr>
+    <tr>
+      {% if article.draft %}
+      <td colspan="2" class="article-body-draft">
+      {% else %}
+      <td colspan="2" class="article-body">
+      {% endif %}
+      {{ article.html }}
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2" class="article-footer">
+        <a href="{{ article.path }}" class="reference">Permalink</a> | Tags: {{ article.tags|join:", " }}</td>
+    </tr>
+  </table>

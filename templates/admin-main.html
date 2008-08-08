@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link href="/static/style.css" rel="stylesheet" type="text/css"/>
+<title>Example blog: Admin</title>
+</head>
+
+<script type="text/javascript">
+
+function show_site()
+{
+    document.location = "/"
+}
+
+function new_article()
+{
+    document.admin.action = "/admin/article/new/"
+    document.admin.submit()
+}
+
+</script>
+
+<body>
+<div id="container">
+
+<div class="admin-page-area">
+
+<h1 class="admin-page-title">Existing articles</h1>
+
+<div class="admin-main-buttons">
+<table align="center"><tr><td>
+<input type="button" name="new" onClick="new_article()" value="New article"/>
+<input type="button" name="show" onClick="show_site()" value="Show site"/>
+</td></tr></table>
+</div>
+
+<form action="" method="show" name="admin">
+
+<ul>
+{% for article in articles %}
+  {% if article.draft %}
+  <li class="admin-draft">
+  {% else %}
+  <li class="admin-published">
+  {% endif %}
+  {{ article.published_when|date:"j F, Y" }}&nbsp;
+  <a href="/admin/article/edit/?id={{ article.id }}">{{ article.title }}</a>
+{% endfor %}
+</ul>
+
+</form>
+
+</div>
+
+</div>
+</body>
+</html>

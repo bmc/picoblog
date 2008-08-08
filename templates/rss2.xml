@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>{{ blog_name }}</title>
+    <link>{{ blog_url }}</link>
+    <description>{{ blog_name }}</description>
+    <pubDate>{{ last_updated|date:"D, d M Y H:i:s T" }}</pubDate>
+    {% for article in articles %}
+    <item>
+      <title>{{ article.title }}</title>
+      <link>{{ article.url }}</link>
+      <guid>{{ article.url }}</guid>
+      <pubDate>{{ article.timestamp|date:"D, d M Y H:i:s T" }}</pubDate>
+      <description>
+        {{ article.html|escape }}
+      </description>
+      <author>{{ blog_author }}</author>
+    </item>
+    {% endfor %}
+  </channel>
+</rss>

@@ -1,0 +1,136 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link href="/static/style.css" rel="stylesheet" type="text/css"/>
+<title>Example blog: Edit Article</title>
+</head>
+
+<script type="text/javascript">
+
+String.prototype.trim = function() 
+{
+    return this.replace(/^\s+|\s+$/g,"");
+}
+
+String.prototype.ltrim = function() 
+{
+    return this.replace(/^\s+/,"");
+}
+
+String.prototype.rtrim = function() 
+{
+    return this.replace(/\s+$/,"");
+}
+
+function save_article()
+{
+    if (document.article.title.value.trim() == '')
+    {
+        alert("You must supply a title.")
+        return
+    }
+
+    if (document.article.content.value.trim() == '')
+    {
+        alert("You must supply content.")
+        return
+    }
+
+    document.article.action = "/admin/article/save/"
+    document.article.submit()
+}
+
+function save_and_reedit()
+{
+    document.article.action = "/admin/article/save/"
+    document.article.edit_again.value = "true"
+    document.article.submit()
+}
+
+function del()
+{
+    if (confirm("Really delete this article?"))
+    {
+        document.article.action= "/admin/article/delete/"
+        document.article.method = "get"
+        document.article.submit()
+    }
+}
+
+function cancel_edit()
+{
+    if (confirm("Really cancel?"))
+        document.location = '/admin/'
+}
+
+</script>
+
+<body>
+<table id="container"><tr><td>
+
+<h1 class="admin-page-title">Edit article</h1>
+
+<div class="admin-page-area">
+
+<form action="" method="post" name="article">
+
+<table border="0" cellpadding="2">
+  <tr>
+    <td align="left" width="5%">&nbsp;</td>
+    <td align="left" colspan="2" width="45%">
+    Title:&nbsp;<input type="text" align="left" width="80" name="title" value="{{ article.title }}"/>
+    </td>
+    <td align="left" width="50%">&nbsp;</td>
+  </tr>
+  <tr>
+    <td align="right" width="5%">&nbsp;
+      {% if article.draft %}
+      <input type="checkbox" name="draft" checked="true"/>
+      {% else %}
+      <input type="checkbox" name="draft"/>
+      {% endif %}
+    </td>
+    <td align="left" width="15%">Draft</td>
+    <td align="left" colspan="2" width="80%">&nbsp;</td>
+  </tr>
+  <tr>
+    <td colspan="4" align="center"><textarea name="content" cols="100%" rows="30">{{ article.body }}</textarea></td>
+  </tr>
+  <tr>
+    <td align="left" width="5%">&nbsp;</td>
+    <td align="left" colspan="2" width="45%">
+    Tags:&nbsp;<input type="text" width="80" name="tags" value="{{ article.tag_string}}"/>
+    </td>
+    <td align="left" width="50%"></td>
+  </tr>
+  <tr>
+    <td colspan="4" align="center" width="100%">&nbsp;</td>
+  </tr>
+  <tr>
+    <td colspan="4" align="center" width="100%">
+      <input type="button" name="save" onClick="save_article()" value="Save"/>
+      <input type="button" name="save" onClick="save_and_reedit()" value="Save and Keep Editing"/>
+      <input type="button" name="cancel" onClick="cancel_edit()" value="Cancel"/>
+      <input type="button" name="delete" onClick="del()" value="Delete"/>
+    </td>
+  </tr>
+</table>
+
+<input type="hidden" name="id" value="{{ article.id }}"/>
+<input type="hidden" name="loaded_draft" value="{{ article.draft }}"/>
+<input type="hidden" name="edit_again" value="false"/>
+</form>
+
+</div>
+
+<h1 class="admin-page-title">Preview:</h1>
+<div style="border-top: 1px solid black">
+<iframe src="/id/{{ article.id }}" width="97%" scrolling="auto" height="750"
+        frameborder="0">
+</iframe>
+
+</div>
+</td></tr></table>
+</body>
+</html>

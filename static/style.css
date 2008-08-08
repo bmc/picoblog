@@ -1,0 +1,186 @@
+/*
+  Some CSS trickery to get the border around the entire page. 
+  See http://www.dave-woods.co.uk/?p=144
+*/
+html, body
+{
+    background-color: #dddddd;
+    height: 98%;
+    font-size: 12pt;
+}
+
+#container
+{
+    font-family: Arial, Verdana, Helvetica, sans serif;
+    min-height: 98%;
+    width: 70%;
+    background-color: white;
+    border: 1px solid black;
+    align: center;
+    margin: 0 auto;
+}
+
+* html #container
+{
+    height: 98%;
+    width: 70%;
+}
+
+/* The other stuff */
+
+h1.admin-page-title
+{
+    text-align: center;
+}
+
+div.admin-main-buttons
+{
+}
+
+div.admin-page-area
+{
+    margin-left: 0;
+}
+
+div.admin-page-area input
+{
+    margin-left: 0;
+}
+
+span.blog_name
+{
+    color: #dddddd;
+    font-size: 42pt;
+}
+
+span.blog_owner
+{
+    color: #dddddd;
+    font-style: italic;
+}
+
+li.admin-draft
+{
+    color: red;
+}
+
+li.admin-draft a
+{
+    color: red;
+}
+
+li.admin-published
+{
+    color: black;
+}
+
+li.admin-published a
+{
+    color: black;
+}
+
+#articles_container
+{
+    border: 1px solid #dddddd;
+    padding: 1em;
+}
+
+.timestamp
+{
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 75%;
+    padding-left: 2em;
+    color: gray;
+    text-align: right;
+}
+
+table.article
+{
+    padding-top: 1em;
+    padding-bottom: 1em;
+}
+
+.article_title
+{
+    font-size: 150%;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-weight: bold; 
+    color: black;
+}
+
+.article-footer
+{
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    /* font-size: 50%;*/
+    color: gray;
+    text-align: left;
+}
+
+#tag-cloud 
+{
+    margin-top: 20px;
+    margin-left: 10px;
+    margin-right: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    border: 1px dashed #dddddd;
+    text-align: center;
+}
+
+#tag-cloud a:visited 
+{
+    text-decoration: none;
+    border: none;
+}
+
+#tag-cloud a:link
+{
+    text-decoration: none;
+    border: none;
+}
+
+#tag-cloud a:active
+{
+    text-decoration: underline;
+    color: grey;
+    border: none;
+}
+
+#tag-cloud a:hover
+{
+    text-decoration: underline;
+    color: grey;
+    border: none;
+}
+
+#tag-cloud div
+{
+    padding: 4px;
+}
+
+.tag-cloud-tiny
+{
+    font-size: 8pt;
+}
+
+.tag-cloud-small 
+{
+    font-size: 10pt;
+}
+
+.tag-cloud-medium 
+{
+    font-size: 12pt;
+}
+
+.tag-cloud-large 
+{
+    font-size: 14pt;
+}
+
+.tag-cloud-huge
+{
+    font-size: 16pt;
+}

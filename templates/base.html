@@ -1,0 +1,92 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>{{ blog_name }}</title>
+<link href="/static/style.css" rel="stylesheet" type="text/css"/>
+</head>
+{% ifequal host "google" %}
+<!-- Google Analytics -->
+
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+var pageTracker = _gat._getTracker("UA-5189686-1");
+pageTracker._trackPageview();
+</script>
+
+<!-- End Google Analytics -->
+{% endifequal %}
+
+<body>
+<table id="container"><tr><td>
+
+<table border="0" width="100%" cellpadding="0" cellspacing="0" class="body">
+  <tr>
+    <td colspan="3">&nbsp;<td>
+  </tr>
+
+  <tr>
+    <td colspan="2" class="margin-area" width="80%" valign="bottom" align="left">
+      <table border="0" width="100%" cellpadding="0" cellspacing="0">
+        <tr>
+          <td align="left"><span class="blog_name">{{ blog_name }}</span></td>
+          <td align="right" style="padding-right: 1em">
+            <div class="text-button" style="width: 10em"><a href="{{ blog_path }}">Top of the blog.</a></div>
+            <div class="text-button" style="width: 10em"><a href="{{ archive_path }}">Complete archive.</a></div>&nbsp;&nbsp;&nbsp;
+          </td>
+        </tr>
+      </table>
+    </td>
+    <td width="20%" align="left"></td>
+  </tr>
+
+  <tr>
+    <td><span class="blog_owner">{{ blog_owner }}</span></td>
+    <td colspan="2">&nbsp;<td>
+  </tr>
+
+  <tr><td colspan="3">&nbsp;</td></tr>
+
+  <tr valign="top">
+    <td width="20%" class="margin-area" align="left">
+      <div>
+      <a href="{{ rss2_path }}" class="button"><img src="/static/rss2-small.gif" width="49" height="15" border="0"></a>
+      <br clear="all"/><br/>
+      {% block tag_list %}{% endblock %}
+      </div>
+    </td>
+    <td width="60%" class="body">
+      <table width="100%" cellpadding="0" cellspacing="0">
+        <tr valign="top">
+          <td width="10">&nbsp;</td>
+          <td align="left">
+            <div id="articles_container">
+              {% block main %}{% endblock %}
+            </div>
+          </td>
+          <td width="10">&nbsp;</td>
+        </tr>
+      </table>
+    </td>
+    <td width="20%" class="margin-area">
+      <div id="right-margin">
+        {% block recent_list %}{% endblock %}
+        {% block date_list %}{% endblock %}
+      </div>
+    </td>
+  </tr>
+
+  <tr>
+    <td valign="top" class="margin-area" width="20%" align="left">&nbsp;</td>
+    <td class="margin-area" width="60%" valign="bottom" align="right"></td>
+    <td valign="top" class="margin-area" width="20%" align="right">&nbsp;</td>
+  </tr>
+
+</table>
+
+</td></tr></table>
+</body>
+</html>
