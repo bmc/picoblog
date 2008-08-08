@@ -26,18 +26,20 @@ class ShowArticlesHandler(request.BlogRequestHandler):
     def get(self):
         articles = Article.get_all()
         template_vars = {'articles' : articles}
-        self.render_template('admin-main.html', template_vars)
-    
+        self.response.out.write(self.render_template('admin-main.html',
+                                                     template_vars))
+
 class NewArticleHandler(request.BlogRequestHandler):
     """
     Handles requests to create and edit a new article.
     """
     def get(self):
-        article = Article(title='New article', 
+        article = Article(title='New article',
                           body='Content goes here',
                           draft=True)
         template_vars = {'article' : article}
-        self.render_template('admin-edit.html', template_vars)
+        self.response.out.write(self.render_template('admin-edit.html',
+                                                     template_vars))
 
 class SaveArticleHandler(request.BlogRequestHandler):
     """
@@ -76,7 +78,7 @@ class SaveArticleHandler(request.BlogRequestHandler):
                               draft=draft)
 
         article.save()
-        
+
         edit_again = cgi.escape(self.request.get('edit_again'))
         edit_again = edit_again and (edit_again.lower() == 'true')
         if edit_again:
@@ -96,8 +98,9 @@ class EditArticleHandler(request.BlogRequestHandler):
 
         article.tag_string = ', '.join(article.tags)
         template_vars = {'article'  : article}
-        self.render_template('admin-edit.html', template_vars)
-        
+        self.response.out.write(self.render_template('admin-edit.html',
+                                                     template_vars))
+
 class DeleteArticleHandler(request.BlogRequestHandler):
     """
     Handles form submissions to delete an article.
@@ -109,7 +112,7 @@ class DeleteArticleHandler(request.BlogRequestHandler):
             article.delete()
 
         self.redirect('/admin/')
-        
+
 # -----------------------------------------------------------------------------
 # Functions
 # -----------------------------------------------------------------------------
@@ -123,7 +126,7 @@ application = webapp.WSGIApplication(
      ],
 
     debug=True)
-        
+
 # -----------------------------------------------------------------------------
 # Main program
 # -----------------------------------------------------------------------------

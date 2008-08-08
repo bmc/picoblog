@@ -225,8 +225,7 @@ class AbstractPageHandler(request.BlogRequestHandler):
         :rtype: list
         :return: list of recent ``Article`` objects
         """
-        if not articles:
-            articles = Article.published()
+        articles = Article.published()
 
         total_recent = min(len(articles), defs.TOTAL_RECENT)
         if articles:

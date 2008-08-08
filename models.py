@@ -46,11 +46,16 @@ class Article(db.Model):
         return articles[0] if articles else None
 
     @classmethod
-    def published(cls):
+    def published_query(cls):
         q = db.Query(Article)
         q.filter('draft = ', False)
-        q.order('-published_when')
-        return q.fetch(FETCH_THEM_ALL)
+        return q
+
+    @classmethod
+    def published(cls):
+        return Article.published_query()\
+                      .order('-published_when')\
+                      .fetch(FETCH_THEM_ALL)
 
     @classmethod
     def get_all_tags(cls):
@@ -99,11 +104,11 @@ class Article(db.Model):
             next_month = start_date.month + 1
 
         end_date = datetime.date(next_year, next_month, 1)
-        query = Article.published()\
+        return Article.published_query()\
                        .filter('published_when >=', start_date)\
                        .filter('published_when <', end_date)\
-                       .order('-published_when')
-        return query.fetch(FETCH_THEM_ALL)
+                       .order('-published_when')\
+                       .fetch(FETCH_THEM_ALL)
 
     @classmethod
     def all_for_tag(cls, tag):

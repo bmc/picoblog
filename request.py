@@ -50,4 +50,4 @@ class BlogRequestHandler(webapp.RequestHandler):
                 Can be empty.
         """
         template_path = self.get_template(template_name)
-        self.response.out.write(template.render(template_path, template_vars))
+        return template.render(template_path, template_vars)
