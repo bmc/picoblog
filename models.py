@@ -66,18 +66,13 @@ class Article(db.Model):
         tag_counts = {}
         for article in Article.published():
             for tag in article.tags:
+                tag = unicode(tag)
                 try:
                     tag_counts[tag] += 1
                 except KeyError:
                     tag_counts[tag] = 1
 
         return tag_counts
-
-    @classmethod
-    def latest(cls):
-        # Surely there's an easier way...
-        article = Article.published()
-        return article[0] if articles else []
 
     @classmethod
     def get_all_datetimes(cls):
