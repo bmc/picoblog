@@ -1,7 +1,7 @@
 import datetime
 import sys
 
-from google.appengine.ext import db    
+from google.appengine.ext import db
 
 FETCH_THEM_ALL = sys.maxint - 1
 
@@ -10,7 +10,7 @@ class Article(db.Model):
     title = db.StringProperty(required=True)
     body = db.TextProperty()
     published_when = db.DateTimeProperty(auto_now_add=True)
-    tags = db.ListProperty(unicode, verbose_name='Tags')
+    tags = db.ListProperty(db.Category)
     id = db.IntegerProperty(required=True)
     draft = db.BooleanProperty(required=True, default=False)
 
@@ -112,12 +112,20 @@ class Article(db.Model):
 
     @classmethod
     def all_for_tag(cls, tag):
-        articles = []
-        for article in Article.published():
-            if tag in article.tags:
-                articles.append(article)
+        return Article.published_query()\
+                      .filter('tags = ', tag)\
+                      .order('-published_when')\
+                      .fetch(FETCH_THEM_ALL)
 
-        return articles
+    @classmethod
+    def convert_string_tags(cls, tags):
+        new_tags = []
+        for t in tags:
+            if type(t) == db.Category:
+                new_tags.append(t)
+            else:
+                new_tags.append(db.Category(unicode(t)))
+        return new_tags
 
     def __unicode__(self):
         return self.__str__()

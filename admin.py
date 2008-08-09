@@ -56,6 +56,7 @@ class SaveArticleHandler(request.BlogRequestHandler):
             tags = [t.strip() for t in tags.split(',')]
         else:
             tags = []
+        tags = Article.convert_string_tags(tags)
 
         if not draft:
             draft = False
