@@ -117,7 +117,9 @@ function cancel_edit()
   </tr>
 </table>
 
+{% if article.id %}
 <input type="hidden" name="id" value="{{ article.id }}"/>
+{% endif %}
 <input type="hidden" name="loaded_draft" value="{{ article.draft }}"/>
 <input type="hidden" name="edit_again" value="false"/>
 </form>
@@ -129,8 +131,8 @@ function cancel_edit()
 <iframe src="/id/{{ article.id }}" width="97%" scrolling="auto" height="750"
         frameborder="0">
 </iframe>
-
 </div>
+
 </td></tr></table>
 </body>
 </html>

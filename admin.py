@@ -48,7 +48,8 @@ class SaveArticleHandler(request.BlogRequestHandler):
     def post(self):
         title = cgi.escape(self.request.get('title'))
         body = cgi.escape(self.request.get('content'))
-        id = int(cgi.escape(self.request.get('id')))
+        s_id = cgi.escape(self.request.get('id'))
+        id = int(s_id) if s_id else None
         tags = cgi.escape(self.request.get('tags'))
         published_when = cgi.escape(self.request.get('published_when'))
         draft = cgi.escape(self.request.get('draft'))
@@ -63,7 +64,7 @@ class SaveArticleHandler(request.BlogRequestHandler):
         else:
             draft = (draft.lower() == 'on')
 
-        article = Article.get(id)
+        article = Article.get(id) if id else None
         if article:
             # It's an edit of an existing item.
             article.title = title
@@ -75,7 +76,6 @@ class SaveArticleHandler(request.BlogRequestHandler):
             article = Article(title=title,
                               body=body,
                               tags=tags,
-                              id=id,
                               draft=draft)
 
         article.save()

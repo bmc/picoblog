@@ -11,26 +11,8 @@ class Article(db.Model):
     body = db.TextProperty()
     published_when = db.DateTimeProperty(auto_now_add=True)
     tags = db.ListProperty(db.Category)
-    id = db.IntegerProperty(required=True)
+    id = db.IntegerProperty()
     draft = db.BooleanProperty(required=True, default=False)
-
-    def __init__(self, *args, **kw):
-        if not ('id' in kw):
-            id = Article.max_id() + 1
-            kw['id'] = id
-        db.Model.__init__(self, *args, **kw)
-
-    @classmethod
-    def max_id(cls):
-        q = db.Query(Article)
-        q.order('-id')
-        articles = q.fetch(1)
-        if not articles:
-            id = 0
-        else:
-            id = articles[0].id
-
-        return id
 
     @classmethod
     def get_all(cls):
@@ -140,10 +122,18 @@ class Article(db.Model):
             # Going from draft to published. Update the timestamp.
             self.published_when = datetime.datetime.now()
 
-        self.put()
+        try:
+            obj_id = self.key().id()
+            resave = False
+        except db.NotSavedError:
+            # No key, hence no ID yet. This one hasn't been saved.
+            # We'll save it once without the ID field; this first
+            # save will cause GAE to assign it a key. Then, we can
+            # extract the ID, put it in our ID field, and resave
+            # the object.
+            resave = True
 
-    def put(self):
-        import time
-        if not self.id:
-            self.id = str(int(time.time()))
-        db.Model.put(self)
+        self.put()
+        if resave:
+            self.id = self.key().id()
+            self.put()
