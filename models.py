@@ -24,8 +24,7 @@ class Article(db.Model):
     def get(cls, id):
         q = db.Query(Article)
         q.filter('id = ', id)
-        articles = q.fetch(1)
-        return articles[0] if articles else None
+        return q.get()
 
     @classmethod
     def published_query(cls):
