@@ -6,6 +6,7 @@ blog.
 """
 
 import cgi
+import logging
 
 from google.appengine.api import users
 from google.appengine.ext import webapp
@@ -67,6 +68,7 @@ class SaveArticleHandler(request.BlogRequestHandler):
         article = Article.get(id) if id else None
         if article:
             # It's an edit of an existing item.
+            just_published = article.draft and (not draft)
             article.title = title
             article.body = body
             article.tags = tags
@@ -77,13 +79,19 @@ class SaveArticleHandler(request.BlogRequestHandler):
                               body=body,
                               tags=tags,
                               draft=draft)
+            just_published = not draft
 
         article.save()
+
+        if just_published:
+            logging.debug('Article %d just went from draft to published. '
+                          'Alerting the media.' % article.id)
+            alert_the_media()
 
         edit_again = cgi.escape(self.request.get('edit_again'))
         edit_again = edit_again and (edit_again.lower() == 'true')
         if edit_again:
-            self.redirect('/admin/article/edit/?id=%s' % id)
+            self.redirect('/admin/article/edit/?id=%s' % article.id)
         else:
             self.redirect('/admin/')
 
@@ -118,6 +126,15 @@ class DeleteArticleHandler(request.BlogRequestHandler):
 # Functions
 # -----------------------------------------------------------------------------
 
+def alert_the_media():
+    # Right now, we only alert Technorati
+    import technorati
+    technorati.ping_technorati()
+
+# -----------------------------------------------------------------------------
+# Main program
+# -----------------------------------------------------------------------------
+
 application = webapp.WSGIApplication(
     [('/admin/?', ShowArticlesHandler),
      ('/admin/article/new/?', NewArticleHandler),
@@ -127,10 +144,6 @@ application = webapp.WSGIApplication(
      ],
 
     debug=True)
-
-# -----------------------------------------------------------------------------
-# Main program
-# -----------------------------------------------------------------------------
 
 def main():
     util.run_wsgi_app(application)
