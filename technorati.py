@@ -44,8 +44,8 @@ class TechnoratiPingError(Exception):
 class GoogleXMLRPCTransport(object):
     """Handles an HTTP transaction to an XML-RPC server."""
 
-    def __init__(self, use_datetime=0):
-        self._use_datetime = use_datetime
+    def __init__(self):
+        pass
 
     def request(self, host, handler, request_body, verbose=0):
         """
