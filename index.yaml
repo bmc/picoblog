@@ -10,14 +10,14 @@ indexes:
 # automatically uploaded to the admin console when you next deploy
 # your application using appcfg.py.
 
-# Used 6 times in query history.
+# Used 17 times in query history.
 - kind: Article
   properties:
   - name: draft
   - name: published_when
     direction: desc
 
-# Used 2 times in query history.
+# Used 6 times in query history.
 - kind: Article
   properties:
   - name: published_when

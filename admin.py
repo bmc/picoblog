@@ -7,13 +7,24 @@ blog.
 
 import cgi
 import logging
+import xmlrpc
+import xmlrpclib
 
 from google.appengine.api import users
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp import util
+from google.appengine.api import urlfetch
 
 from models import *
 import request
+import defs
+
+# -----------------------------------------------------------------------------
+# Constants
+# -----------------------------------------------------------------------------
+
+TECHNORATI_PING_RPC_URL = 'http://rpc.technorati.com/rpc/ping'
+FAKE_TECHNORATI_PING_RPC_URL = 'http://localhost/~bmc/technorati-mock/'
 
 # -----------------------------------------------------------------------------
 # Classes
@@ -126,10 +137,30 @@ class DeleteArticleHandler(request.BlogRequestHandler):
 # Functions
 # -----------------------------------------------------------------------------
 
+def ping_technorati():
+    if defs.ON_GAE:
+        url = TECHNORATI_PING_RPC_URL
+    else:
+        url = FAKE_TECHNORATI_PING_RPC_URL
+
+    logging.debug('Pinging Technorati at: %s' % url)
+    try:
+        transport = xmlrpc.GoogleXMLRPCTransport()
+        rpc_server = xmlrpclib.ServerProxy(url, transport=transport)
+        result = rpc_server.weblogUpdates.ping(defs.BLOG_NAME,
+                                               defs.CANONICAL_BLOG_URL)
+        if result.get('flerror', False) == True:
+            logging.error('Technorati ping error from server: %s' %
+                          result.get('message', '(No message in RPC result)'))
+        else:
+            logging.debug('Technorati ping successful.')
+    except:
+        raise urlfetch.DownloadError, \
+              "Can't ping Technorati: %s" % sys.exc_info()[1]
+
 def alert_the_media():
     # Right now, we only alert Technorati
-    import technorati
-    technorati.ping_technorati()
+    ping_technorati()
 
 # -----------------------------------------------------------------------------
 # Main program

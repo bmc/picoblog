@@ -16,27 +16,6 @@ import logging
 
 from google.appengine.api import urlfetch
 
-import defs
-
-# -----------------------------------------------------------------------------
-# Constants
-# -----------------------------------------------------------------------------
-
-TECHNORATI_PING_RPC_URL = 'http://rpc.technorati.com/rpc/ping'
-FAKE_TECHNORATI_PING_RPC_URL = 'http://localhost/~bmc/technorati-mock/'
-
-# -----------------------------------------------------------------------------
-# Classes
-# -----------------------------------------------------------------------------
-
-class TechnoratiPingError(Exception):
-    
-    def __init__(self, msg):
-        self.msg = msg
-        
-    def __str__(self):
-        return msg
-
 # -----------------------------------------------------------------------------
 # Classes
 # -----------------------------------------------------------------------------
@@ -94,36 +73,6 @@ class GoogleXMLRPCTransport(object):
         return result
 
     def __parse_response(self, response_body):
-        p, u = xmlrpclib.getparser(use_datetime=self._use_datetime)
+        p, u = xmlrpclib.getparser(use_datetime=0)
         p.feed(response_body)
         return u.close()
-
-# -----------------------------------------------------------------------------
-# Functions
-# -----------------------------------------------------------------------------
-
-def ping_technorati():
-    if defs.ON_GAE:
-        url = TECHNORATI_PING_RPC_URL
-    else:
-        url = FAKE_TECHNORATI_PING_RPC_URL
-
-    logging.debug('Pinging Technorati at: %s' % url)
-    try:
-        rpc_server = xmlrpclib.ServerProxy(url,
-                                           transport=GoogleXMLRPCTransport())
-    except:
-        raise TechnoratiPingError("Can't ping Technorati: %s" %
-                                  sys.exc_info()[1])
-    
-    try:
-        result = rpc_server.weblogUpdates.ping(defs.BLOG_NAME,
-                                               defs.CANONICAL_BLOG_URL)
-        if result.get('flerror', False) == True:
-            logging.error('Technorati ping error from server: %s' %
-                          result.get('message', '(No message in RPC result)'))
-        else:
-            logging.debug('Technorati ping successful.')
-    except:
-        raise TechnoratiPingError("Can't ping Technorati: %s" %
-                                  sys.exc_info()[1])
