@@ -12,7 +12,7 @@ layout: default
   ([picoblog.zip][])
 * [*Adding page caching to a GAE application*][article2]
   ([picoblog2.zip][])
-* [Making XML-RPC calls from a Google App Engine application][article3]
+* [*Making XML-RPC calls from a Google App Engine application*][article3]
   ([picoblog3.zip][])
   
 [my blog]: http://brizzled.clapper.org/
@@ -22,3 +22,25 @@ layout: default
 [picoblog.zip]: http://github.com/downloads/bmc/picoblog/picoblog.zip
 [picoblog2.zip]: http://github.com/downloads/bmc/picoblog/picoblog2.zip
 [picoblog3.zip]: http://github.com/downloads/bmc/picoblog/picoblog3.zip
+
+## Getting the software
+
+### Already zipped up for you
+
+See the *zip* links next to the titles of the blog articles, above.
+
+### From the source code repository
+
+The source for *picoblog* is maintained in a [GitHub repository][]. You can
+clone the repository with this command:
+
+    git clone git://github.com/bmc/picoblog.git
+
+[GitHub repository]: http://github.com/bmc/picoblog
+
+## Copyright and License
+
+This software is copyright &copy; 2008-2010 Brian M. Clapper and is released
+under a BSD license. See the [license file][] for full details.
+
+[license file]: license.html
