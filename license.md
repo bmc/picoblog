@@ -1,5 +1,5 @@
 ---
-title: License for Java EditLine
+title: License for Picoblog
 layout: default
 ---
 
