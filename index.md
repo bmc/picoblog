@@ -27,7 +27,10 @@ layout: default
 
 ### Already zipped up for you
 
-See the *zip* links next to the titles of the blog articles, above.
+See the *zip* links next to the titles of the blog articles, above; or,
+visit the [downloads area][].
+
+[downloads area]: http://github.com/bmc/picoblog/downloads
 
 ### From the source code repository
 
