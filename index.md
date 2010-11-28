@@ -1,6 +1,6 @@
 ---
 title: picoblog — Sample blogging software for Google App Engine
-layout: default
+layout: withTOC
 ---
 
 ## What is *picoblog*?
@@ -40,6 +40,15 @@ clone the repository with this command:
     git clone git://github.com/bmc/picoblog.git
 
 [GitHub repository]: http://github.com/bmc/picoblog
+
+## Related Software
+
+[David Jonathan Nelson][] has created an [App Engine Blog][AEB] (AEB)
+project by forking *picoblog*. AEB "seeks to provide a near WordPress
+quality blog engine that runs on Google App Engine."
+
+[David Jonathan Nelson]: http://code.google.com/u/david.jonathan.nelson/
+[AEB]: http://code.google.com/p/appengineblogsoftware/
 
 ## Copyright and License
 
