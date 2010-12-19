@@ -14,4 +14,4 @@ following articles in [my blog][]:
 Please see those articles, as well as the [Picoblog web page][] for complete
 details.
 
-[Picoblog web page]: http://bmc.github.com/picoblog/
+[Picoblog web page]: http://software.clapper.org/picoblog/
